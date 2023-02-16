@@ -5,7 +5,7 @@ import errno
 from time import time
 from fuse import FUSE, FuseOSError, Operations
 from typing import Sequence, Dict, Any
-from stat import S_IFDIR
+from stat import S_IFDIR, S_IFREG
 
 
 class MyFileSystem(Operations):
@@ -48,7 +48,7 @@ class MyFileSystem(Operations):
         now = time()
 
         return {
-            'st_mode': (S_IFDIR | 0o755),
+            'st_mode': (S_IFDIR | 0o555) if is_dir else (S_IFREG | 0o444),
             'st_nlink': 2 if is_dir else 1,
             'st_size': 0,
             'st_ctime': now,
